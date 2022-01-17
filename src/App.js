@@ -1,10 +1,17 @@
 import './App.css';
 import _ from 'lodash';
-
+import { useState } from 'react';
+import './hardList';
+import './mediumList';
+import './easyList';
+import {easyList} from './easyList';
+import {mediumList} from './mediumList';
+import {hardList} from './hardList';
+import { valid } from 'semver';
 
 function LetterBox(props) {
   return (
-    <button key={props.idx} className={'letterbox ' + props.cName}>
+    <button className={'letterbox ' + props.cName} >
       {props.value}
     </button>
   );
@@ -13,10 +20,8 @@ function LetterBox(props) {
 function renderWordLetter(i, val) {
   return (
     <LetterBox 
-      key = {i}
       value = {val}
       cName= 'word' 
-      idx = {i} 
     />
   );
 }
@@ -29,10 +34,9 @@ function renderkeyHintLetter(i, val) {
 
   return (
     <LetterBox
-      key = {i}
       value = {val}
       cName = {'keyHint ' + state}
-      idx = {i} 
+      key = {i}
     />
   );
 }
@@ -52,7 +56,6 @@ function WordBoxes(props) {
 }
 
 function TurnInput(props) {
-  //const [name, setName] = useState("");
 
   return (
     <div>
@@ -62,7 +65,8 @@ function TurnInput(props) {
           value={props.value}
           onChange={props.onChange}
         />
-        <input type="submit" />
+        <input type="submit" value="Submit" style={{'marginRight':'10px'}}/>
+        <input type="button" value="Reset Board" onClick={props.resetBoard}/>
       </form>
     </div>
   );
@@ -72,26 +76,16 @@ function renderWordBoxes(wordList) {
   return wordList.map(
     (word, i) => { 
       return (
-        <div> 
-          <WordBoxes key={i} className = 'words' wordLen='5' attemptId={i} value={word}/>
+        <div key = {i}> 
+          <WordBoxes className = 'words' wordLen='5' attemptId={i} value={word}/>
         </div>
       );});
 }
 
 function Board(props) {
   const numAttempts = parseInt(props.numAttempts);
-  const turnList = _.fill(Array(numAttempts), '');
+  const turnList =  [...props.turnWords, '', '', '', '', '', '',].slice(0,6);
   
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(`Submitted`);
-  }
-
-  const onChange = (e) => {
-    console.log(e.target.value);
-  }
-
-
   return (
     <div>
       <div className='board'>
@@ -99,8 +93,10 @@ function Board(props) {
       </div>
       <TurnInput 
         className="input" 
-        handleSubmit = {(e) => handleSubmit(e)}
-        onChange= {(e) => onChange(e)}>
+        value = {props.turnInputValue}
+        handleSubmit = {(e) => props.handleSubmit(e)}
+        onChange= {(e) => props.onChange(e)}
+        resetBoard = {props.resetBoard}>
         </TurnInput>
     </div>
   );
@@ -109,7 +105,7 @@ function renderKeyHintsRow(row, id) {
   let letters = row.map((k, i) => renderkeyHintLetter(10*id+i, k));
   //console.log(letters);
   return (
-  <div className={'keyHint row' + id}>
+  <div className={'keyHint row' + id} key = {10*id}>
     {letters}
   </div>
   );
@@ -134,13 +130,71 @@ function KeyHints(props) {
   );
 }
 
+const wordListsbyDifficulty = {
+  easy: easyList,
+  medium: mediumList,
+  hard: hardList
+};
+
+function validateWord(word, difficulty) {
+  if(word.length !=5) {
+    return false;
+  }
+  const lowerW = word.toLowerCase();
+  const validWordList = wordListsbyDifficulty[difficulty];
+
+  if(!validWordList.some((x) => {return x === lowerW;})) {
+    return false;
+  }
+
+  //Check other validations here;
+  
+  return true;
+}
+
 function App() {
+  const numTurns = 6;
+  const difficulty = 'medium';
+  
+  const [inputVal, setInputVal] = useState('');
+  const [turnWords, setTurnWords] = useState([]);
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if(turnWords.length >= numTurns) {
+      return;
+    }
+
+    if(!validateWord(inputVal, difficulty)) {
+      alert("Invalid Word SUbmitted!")
+      return;
+    }
+
+    setTurnWords([...turnWords, inputVal]);
+    setInputVal('');
+  }
+
+  const onChange = (e) => {
+    e.preventDefault();
+    setInputVal(e.target.value.toUpperCase());
+  }
+
+  const resetBoard = () => {
+    setInputVal("");
+    setTurnWords([]);
+  }
 
   return (
     <div className="game">
       <div className='board'>
         <Board 
-          numAttempts = '6'
+          numAttempts = {numTurns}
+          turnWords = {turnWords}
+          turnInputValue = {inputVal}
+          onChange = {(e) => onChange(e)}
+          handleSubmit = {(e) => handleSubmit(e)}
+          resetBoard = {() => resetBoard()}
+          difficulty = {difficulty}
         />
       </div>
       <div>
