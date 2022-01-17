@@ -1,9 +1,6 @@
 import './App.css';
 import _ from 'lodash';
 
-function KeyHints(props) {
-  return null;
-}
 
 function LetterBox(props) {
   return (
@@ -19,6 +16,22 @@ function renderWordLetter(i, val) {
       key = {i}
       value = {val}
       cName= 'word' 
+      idx = {i} 
+    />
+  );
+}
+
+function renderkeyHintLetter(i, val) {
+  let state = 'default';
+  if(val === '') {
+    state = 'empty';
+  }
+
+  return (
+    <LetterBox
+      key = {i}
+      value = {val}
+      cName = {'keyHint ' + state}
       idx = {i} 
     />
   );
@@ -92,6 +105,34 @@ function Board(props) {
     </div>
   );
 }
+function renderKeyHintsRow(row, id) {
+  let letters = row.map((k, i) => renderkeyHintLetter(10*id+i, k));
+  //console.log(letters);
+  return (
+  <div className={'keyHint row' + id}>
+    {letters}
+  </div>
+  );
+}
+
+function KeyHints(props) {
+  const keyboard = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',],  
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',  '',],
+    ['',  'Z', 'X', 'C', 'V', 'B', 'N', 'M', '',   '',],
+  ]
+
+  //Generate letter states
+  
+  let i = 0;
+  return (
+    <div className='keyHints'>
+      {renderKeyHintsRow(keyboard[i], i++)}
+      {renderKeyHintsRow(keyboard[i], i++)}
+      {renderKeyHintsRow(keyboard[i], i++)}
+    </div>
+  );
+}
 
 function App() {
 
@@ -102,7 +143,7 @@ function App() {
           numAttempts = '6'
         />
       </div>
-      <div className='keyHints'>
+      <div>
         <KeyHints/>
       </div>
     </div>

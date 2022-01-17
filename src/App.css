@@ -26,4 +26,20 @@
 .board {
   display: grid;
   margin: auto;
+  justify-items: center;
+}
+
+.keyHints {
+  display: grid;
+  margin: auto;
+  justify-items: center;
+}
+
+.letterbox.keyHint.default {
+  background: cornsilk;
+}
+
+.letterbox.keyHint.empty {
+  background: transparent;
+  border: 0px transparent;
 }
