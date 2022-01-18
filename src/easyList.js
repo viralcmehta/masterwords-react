@@ -1,4 +1,4 @@
-export const easyList = [
+const easyList = [
 "other",
 "there",
 "which",
@@ -236,3 +236,5 @@ export const easyList = [
 "teeth",
 "shell",
 ];
+
+export {easyList};

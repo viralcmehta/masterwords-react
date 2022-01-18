@@ -1,13 +1,9 @@
 import './App.css';
 import _ from 'lodash';
 import { useState } from 'react';
-import './hardList';
-import './mediumList';
-import './easyList';
 import {easyList} from './easyList';
 import {mediumList} from './mediumList';
 import {hardList} from './hardList';
-import { valid } from 'semver';
 
 function LetterBox(props) {
   return (

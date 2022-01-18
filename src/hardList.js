@@ -1,4 +1,4 @@
-export const hardList = ["aahed",
+const hardList = ["aahed",
 "aalii",
 "aargh",
 "aaron",
@@ -15918,3 +15918,4 @@ export const hardList = ["aahed",
 "zunis",
 ];
 
+export {hardList};
