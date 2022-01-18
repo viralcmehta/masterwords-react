@@ -1,52 +1,53 @@
-import './App.css';
 import _ from 'lodash';
 import { useState } from 'react';
-import {easyList} from './easyList';
-import {mediumList} from './mediumList';
-import {hardList} from './hardList';
+import './App.css';
+import {validateWord, chooseRandomWord, evaluateWord, keyboardLayout} from './gameLogic'
 
 function LetterBox(props) {
   return (
-    <button className={'letterbox ' + props.cName} >
+    <button className={'letterbox ' + props.cName} key={props.ikey} >
       {props.value}
     </button>
   );
 }
 
-function renderWordLetter(i, val) {
+function renderkeyHintLetter(id, char, color) {
+  let clr = color;
+  if(char === '') {
+    clr = 'empty';
+  }
+
   return (
     <LetterBox 
-      value = {val}
-      cName= 'word' 
+      value = {char}
+      cName= {'word ' + clr} 
+      ikey = {id}
+      key = {id}
     />
   );
 }
 
-function renderkeyHintLetter(i, val) {
-  let state = 'default';
-  if(val === '') {
-    state = 'empty';
-  }
-
+function renderWordLetter(id, char, color) {
   return (
-    <LetterBox
-      value = {val}
-      cName = {'keyHint ' + state}
-      key = {i}
+    <LetterBox 
+      value = {char}
+      cName= {'word ' + color} 
+      ikey = {id}
+      key = {id}
     />
   );
 }
 
 function WordBoxes(props) {
-  let i = 0;
-  const firstFive = props.value.toUpperCase().slice(0,5);
+  const charClrs = _.zip(props.turn.word.split(''), props.turn.colors)
   return (
     <div>
-      {renderWordLetter(i, firstFive[i++])}
-      {renderWordLetter(i, firstFive[i++])}
-      {renderWordLetter(i, firstFive[i++])}
-      {renderWordLetter(i, firstFive[i++])}
-      {renderWordLetter(i, firstFive[i++])}
+      {
+        charClrs.map( (cc, i) => {
+          return (
+            renderWordLetter(i, cc[0], cc[1])
+          ); })
+      }
     </div>
   );
 }
@@ -68,24 +69,34 @@ function TurnInput(props) {
   );
 }
 
-function renderWordBoxes(wordList) {
-  return wordList.map(
-    (word, i) => { 
+function renderWordBoxes(turns, maxTurns) {
+  const emptyturn = {word:'     ', colors:Array(5).fill('default')}; 
+
+  let turnList = [...turns, ...Array(maxTurns).fill(emptyturn)].slice(0,maxTurns);
+
+  return turnList.map(
+    (turn, i) => { 
       return (
         <div key = {i}> 
-          <WordBoxes className = 'words' wordLen='5' attemptId={i} value={word}/>
+          <WordBoxes 
+            className = 'words' 
+            wordLen='5' 
+            attemptId={i} 
+            turn={turn} 
+            />
         </div>
       );});
+
+  
 }
 
 function Board(props) {
-  const numAttempts = parseInt(props.numAttempts);
-  const turnList =  [...props.turnWords, '', '', '', '', '', '',].slice(0,6);
+  const numAttempts = parseInt(props.numAttempts);  
   
   return (
     <div>
       <div className='board'>
-        {renderWordBoxes(turnList)}
+        {renderWordBoxes(props.turns, numAttempts)}
       </div>
       <TurnInput 
         className="input" 
@@ -97,9 +108,14 @@ function Board(props) {
     </div>
   );
 }
-function renderKeyHintsRow(row, id) {
-  let letters = row.map((k, i) => renderkeyHintLetter(10*id+i, k));
-  //console.log(letters);
+
+function renderKeyHintsRow(row, id, turns) {
+  let letters = row.map((k, i) => {
+      
+      return renderkeyHintLetter(10*id+i, k);
+    }
+  );
+
   return (
   <div className={'keyHint row' + id} key = {10*id}>
     {letters}
@@ -108,44 +124,17 @@ function renderKeyHintsRow(row, id) {
 }
 
 function KeyHints(props) {
-  const keyboard = [
-    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',],  
-    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',  '',],
-    ['',  'Z', 'X', 'C', 'V', 'B', 'N', 'M', '',   '',],
-  ]
 
   //Generate letter states
   
   let i = 0;
   return (
     <div className='keyHints'>
-      {renderKeyHintsRow(keyboard[i], i++)}
-      {renderKeyHintsRow(keyboard[i], i++)}
-      {renderKeyHintsRow(keyboard[i], i++)}
+      {renderKeyHintsRow(keyboardLayout[i], i++, props.turns)}
+      {renderKeyHintsRow(keyboardLayout[i], i++, props.turns)}
+      {renderKeyHintsRow(keyboardLayout[i], i++, props.turns)}
     </div>
   );
-}
-
-const wordListsbyDifficulty = {
-  easy: easyList,
-  medium: mediumList,
-  hard: hardList
-};
-
-function validateWord(word, difficulty) {
-  if(word.length !=5) {
-    return false;
-  }
-  const lowerW = word.toLowerCase();
-  const validWordList = wordListsbyDifficulty[difficulty];
-
-  if(!validWordList.some((x) => {return x === lowerW;})) {
-    return false;
-  }
-
-  //Check other validations here;
-  
-  return true;
 }
 
 function App() {
@@ -154,6 +143,10 @@ function App() {
   
   const [inputVal, setInputVal] = useState('');
   const [turnWords, setTurnWords] = useState([]);
+  const [turns, setTurns] = useState( [] );
+
+  const [targetWord, ] = useState(chooseRandomWord(difficulty));
+  console.log(targetWord);
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -161,10 +154,14 @@ function App() {
       return;
     }
 
-    if(!validateWord(inputVal, difficulty)) {
-      alert("Invalid Word SUbmitted!")
+    if(!validateWord(inputVal, 'hard')) {
+      alert("Invalid Word Submitted!")
       return;
     }
+
+    const colors = evaluateWord(inputVal, targetWord);
+
+    setTurns( [...turns, {word: inputVal, colors: colors}] );
 
     setTurnWords([...turnWords, inputVal]);
     setInputVal('');
@@ -185,7 +182,7 @@ function App() {
       <div className='board'>
         <Board 
           numAttempts = {numTurns}
-          turnWords = {turnWords}
+          turns = {turns}
           turnInputValue = {inputVal}
           onChange = {(e) => onChange(e)}
           handleSubmit = {(e) => handleSubmit(e)}
@@ -194,7 +191,9 @@ function App() {
         />
       </div>
       <div>
-        <KeyHints/>
+        <KeyHints
+          turns = {turns}
+        />
       </div>
     </div>
   );

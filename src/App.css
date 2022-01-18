@@ -43,3 +43,15 @@
   background: transparent;
   border: 0px transparent;
 }
+
+.letterbox.word.green {
+  background: greenyellow;
+}
+
+.letterbox.word.yellow {
+  background: yellow;
+}
+
+.letterbox.word.grey {
+  background: grey;
+}
