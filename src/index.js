@@ -11,7 +11,6 @@ function App() {
   const difficulty = 'medium';
   
   const [inputVal, setInputVal] = useState('');
-  const [turnWords, setTurnWords] = useState([]);
   const [turns, setTurns] = useState( [] );
 
   const [targetWord, ] = useState(chooseRandomWord(difficulty));
@@ -19,7 +18,7 @@ function App() {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(turnWords.length >= numTurns) {
+    if(turns.length >= numTurns) {
       return;
     }
 
@@ -31,8 +30,6 @@ function App() {
     const colors = evaluateWord(inputVal, targetWord);
 
     setTurns( [...turns, {word: inputVal, colors: colors}] );
-
-    setTurnWords([...turnWords, inputVal]);
     setInputVal('');
   }
 
@@ -43,7 +40,7 @@ function App() {
 
   const resetBoard = () => {
     setInputVal("");
-    setTurnWords([]);
+    setTurns([]);
   }
 
   return (
