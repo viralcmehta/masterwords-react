@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {validateWord, chooseRandomWord, evaluateWord} from './utils/gameLogic'
 import Board from './Components/Board';
 import KeyHints from './Components/KeyHints';
-//import StatusBar from './Components/StatusBar';
+import StatusBar from './Components/StatusBar';
 
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="game">
       <div className='statusbar'>
-        {/* <StatusBar/> */}
+        <StatusBar/>
       </div>
       <div className='board'>
         <Board 
