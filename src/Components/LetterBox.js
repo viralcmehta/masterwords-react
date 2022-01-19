@@ -3,9 +3,9 @@ import "./LetterBox.css"
 
 function LetterBox(props) {
   return (
-    <button className={'letterbox ' + props.cName} key={props.ikey} >
+    <div className={'letterbox ' + props.cName} key={props.ikey} >
       {props.value}
-    </button>
+    </div>
   );
 }
 

@@ -6,11 +6,17 @@
   font-weight: bold;
   line-height: 34px;
   height: 34px;
-  margin-right: 3px;
+  margin-right: 1vw;
   margin-top: 10px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 8vw;
+  height: 8vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .letterbox.keyHint.default {
@@ -22,14 +28,14 @@
   border: 0px transparent;
 }
 
-.letterbox.word.green {
+.letterbox.green {
   background: greenyellow;
 }
 
-.letterbox.word.yellow {
+.letterbox.yellow {
   background: yellow;
 }
 
-.letterbox.word.grey {
+.letterbox.grey {
   background: grey;
 }

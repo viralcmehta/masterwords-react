@@ -14,6 +14,16 @@ const wordListsbyDifficulty = {
   hard: hardList
 };
 
+function getGameStatus(turns, targetWord, maxAttempts) {
+  if(turns.at(-1).word === targetWord) {
+    return 'winner';
+  }
+  if(turns.length >= maxAttempts) {
+    return 'loser';
+  }
+  return 'inprogress';
+}
+
 function validateWord(word, difficulty) {
   if(word.length !==5) {
     return false;
@@ -78,4 +88,10 @@ function evaluateWord(word, target) {
 }
 
 
-export {chooseRandomWord, evaluateWord, validateWord, wordListsbyDifficulty, keyboardLayout};
+export {
+  chooseRandomWord, 
+  evaluateWord, 
+  validateWord, 
+  getGameStatus,
+  wordListsbyDifficulty, 
+  keyboardLayout};
