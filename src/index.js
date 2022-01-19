@@ -1,8 +1,72 @@
 import React from 'react';
+import {useState} from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-//import reportWebVitals from './reportWebVitals';
+import {validateWord, chooseRandomWord, evaluateWord} from './utils/gameLogic'
+import Board from './Components/Board';
+import KeyHints from './Components/KeyHints';
+
+
+function App() {
+  const numTurns = 6;
+  const difficulty = 'medium';
+  
+  const [inputVal, setInputVal] = useState('');
+  const [turnWords, setTurnWords] = useState([]);
+  const [turns, setTurns] = useState( [] );
+
+  const [targetWord, ] = useState(chooseRandomWord(difficulty));
+  console.log(targetWord);
+  
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if(turnWords.length >= numTurns) {
+      return;
+    }
+
+    if(!validateWord(inputVal, 'hard')) {
+      alert("Invalid Word Submitted!")
+      return;
+    }
+
+    const colors = evaluateWord(inputVal, targetWord);
+
+    setTurns( [...turns, {word: inputVal, colors: colors}] );
+
+    setTurnWords([...turnWords, inputVal]);
+    setInputVal('');
+  }
+
+  const onChange = (e) => {
+    e.preventDefault();
+    setInputVal(e.target.value.toUpperCase());
+  }
+
+  const resetBoard = () => {
+    setInputVal("");
+    setTurnWords([]);
+  }
+
+  return (
+    <div className="game">
+      <div className='board'>
+        <Board 
+          numAttempts = {numTurns}
+          turns = {turns}
+          turnInputValue = {inputVal}
+          onChange = {(e) => onChange(e)}
+          handleSubmit = {(e) => handleSubmit(e)}
+          resetBoard = {() => resetBoard()}
+          difficulty = {difficulty}
+        />
+      </div>
+      <div>
+        <KeyHints
+          turns = {turns}
+        />
+      </div>
+    </div>
+  );
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,7 +75,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-//reportWebVitals(console.log);

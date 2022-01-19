@@ -1,0 +1,35 @@
+.letterbox {
+  background: rgb(221, 164, 169);
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: 3px;
+  margin-top: 10px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.letterbox.keyHint.default {
+  background: cornsilk;
+}
+
+.letterbox.keyHint.empty {
+  background: transparent;
+  border: 0px transparent;
+}
+
+.letterbox.word.green {
+  background: greenyellow;
+}
+
+.letterbox.word.yellow {
+  background: yellow;
+}
+
+.letterbox.word.grey {
+  background: grey;
+}
