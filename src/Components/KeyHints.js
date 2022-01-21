@@ -1,7 +1,8 @@
-import './KeyHints.css'
+import './css/KeyHints.css'
 import LetterBox from './LetterBox';
 import { keyboardLayout } from './../utils/gameLogic';
 import _ from 'lodash'
+import React, { useRef } from 'react';
 
 function renderkeyHintLetter(id, char, color) {
   let clr = color;
@@ -65,6 +66,10 @@ function renderKeyHintsRow(row, id, colorMap) {
 }
 
 function KeyHints(props) {
+  const countRef = useRef(0);
+  const componentName = 'KeyHints';
+  console.log(`Render ${componentName} ${countRef.current++}` );
+
   //Generate letter states
   let colorMap = getColorMapFromTurns(props.turns);
   return (
@@ -74,4 +79,5 @@ function KeyHints(props) {
   );
 }
 
-export default KeyHints;
+const KeyHintsMemo = React.memo(KeyHints);
+export default KeyHintsMemo;

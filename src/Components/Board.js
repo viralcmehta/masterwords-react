@@ -1,4 +1,5 @@
-import './Board.css'
+import { useMemo, useRef } from 'react';
+import './css/Board.css'
 import TurnComponent  from './TurnComponent';
 import TurnInput from './TurnInput';
 
@@ -7,7 +8,7 @@ function renderWordBoxes(turns, maxTurns) {
 
   let turnList = [...turns, ...Array(maxTurns).fill(emptyturn)].slice(0, maxTurns);
 
-  return turnList.map(
+  const boxes = turnList.map(
     (turn, i) => {
       return (
         <div key={i}>
@@ -19,15 +20,22 @@ function renderWordBoxes(turns, maxTurns) {
         </div>
       );
     });
+    return boxes;
 }
 
 function Board(props) {
+  const countRef = useRef(0);
+  const componentName = 'Board';
+  console.log(`Render ${componentName} ${countRef.current++}` );
+
   const numAttempts = parseInt(props.numAttempts);
+  const boxes = useMemo(() => renderWordBoxes(props.turns, numAttempts), 
+            [props.turns, numAttempts]);
 
   return (
     <div>
       <div className='board'>
-        {renderWordBoxes(props.turns, numAttempts)}
+        {boxes}
       </div>
       <TurnInput
         className="input"

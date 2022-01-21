@@ -1,78 +1,150 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {useState} from 'react';
 import ReactDOM from 'react-dom';
-import {validateWord, chooseRandomWord, evaluateWord} from './utils/gameLogic'
+import {validateWord, chooseRandomWord, evaluateWord, getGameStatus} from './utils/gameLogic'
 import Board from './Components/Board';
 import KeyHints from './Components/KeyHints';
-import StatusBar from './Components/StatusBar';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './index.css'
+import preval from 'babel-plugin-preval/macro';
 
 function App() {
+  const countRef = useRef(0);
+  const componentName = 'App';
   const numTurns = 6;
-  const difficulty = 'medium';
-  
+  const difficulty = 'medium';  
   const [inputVal, setInputVal] = useState('');
   const [turns, setTurns] = useState( [] );
+  const [targetWord, setTargetWord] = useState(chooseRandomWord(difficulty));
+  const [gameStatus, setGameStatus] = useState(getGameStatus(turns, targetWord, numTurns));
 
-  const [targetWord, ] = useState(chooseRandomWord(difficulty));
+  console.log(`Render ${componentName} ${countRef.current++} gs ${gameStatus}` );
   console.log(targetWord);
+
+  const toastId = React.useRef(null);
+
+  if(gameStatus === 'loser') {
+    let toastOptions = {
+      autoClose: false,
+      type: toast.TYPE.ERROR
+    };
+    if(!toast.isActive(toastId.current)) {
+      toastId.current = toast(`LOSER: IT WAS ${targetWord}`, toastOptions);
+    }
+  }
+  else if (gameStatus === 'winner') {
+    let toastOptions = {
+      autoClose: false,
+      type: toast.TYPE.SUCCESS
+    };
+    if(!toast.isActive(toastId.current)) {
+      toastId.current = toast("WINNER WINNER CHICKEN DINNER", toastOptions);
+      console.log(toastId.current);
+    }
+  }
   
   const handleSubmit = (event) => {
     event.preventDefault();
+    var val = event.target[0].value;
+
+    let toastOptions = {
+      type: toast.TYPE.WARNING,
+    };
+
+    if(gameStatus !== "inprogress") {
+      return;
+    }
+
     if(turns.length >= numTurns) {
+      toast(`"${val}" is longer than 5 letters.`, toastOptions);
       return;
     }
 
-    if(!validateWord(inputVal, 'hard')) {
-      alert("Invalid Word Submitted!")
+    let status = validateWord(val, 'hard');
+    if(status !== '') {
+      toast(status, toastOptions);
       return;
     }
 
-    const colors = evaluateWord(inputVal, targetWord);
+    const colors = evaluateWord(val, targetWord);
+    const newTurns = [...turns, {word: val, colors: colors}];
+    const gs = getGameStatus(newTurns, targetWord, numTurns)
 
-    setTurns( [...turns, {word: inputVal, colors: colors}] );
+    console.log(`handleSubmit: gs ${gs}`)
+    setGameStatus(gs);
+
+
+    setTurns( newTurns );
     setInputVal('');
   }
 
   const onChange = (e) => {
     e.preventDefault();
+    if(gameStatus !== 'inprogress') {
+      return;
+    }
     setInputVal(e.target.value.toUpperCase());
   }
 
   const resetBoard = () => {
     setInputVal("");
     setTurns([]);
+    setGameStatus("inprogress");
+    setTargetWord(chooseRandomWord(difficulty));
+    toast.dismiss(toastId.current);
+    toastId.current = null;
   }
 
+
   return (
-    <div className="game">
-      <div className='statusbar'>
-        <StatusBar/>
+    <>
+      <div className="game">
+        <div className='board'>
+          <Board 
+            numAttempts = {numTurns}
+            turns = {turns}
+            turnInputValue = {inputVal}
+            onChange = {e => onChange(e)}
+            handleSubmit = {(e) => handleSubmit(e)}
+            resetBoard = {() => resetBoard()}
+            difficulty = {difficulty}
+          />
+        </div>
+        <div>
+          <KeyHints
+            turns = {turns}
+          />
+        </div>
       </div>
-      <div className='board'>
-        <Board 
-          numAttempts = {numTurns}
-          turns = {turns}
-          turnInputValue = {inputVal}
-          onChange = {(e) => onChange(e)}
-          handleSubmit = {(e) => handleSubmit(e)}
-          resetBoard = {() => resetBoard()}
-          difficulty = {difficulty}
-        />
+      <ToastContainer 
+        theme='dark'
+        autoClose={2500}
+        position={toast.POSITION.TOP_CENTER}
+      />
+      <div id='buildString'>
+        Build Date: {preval`module.exports = new Date().toLocaleString();`}
       </div>
-      <div>
-        <KeyHints
-          turns = {turns}
-        />
-      </div>
-    </div>
-  );
+    </>
+);
+}
+
+const EnableStrictMode = false;
+function renderApp() {
+  if(EnableStrictMode) {
+    return (
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );   
+  }
+  else {
+    return (<App />);
+  }
 }
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  renderApp(),
   document.getElementById('root')
 );
 

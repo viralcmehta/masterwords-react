@@ -16,3 +16,8 @@ code {
   text-align: center;
 }
 
+#buildString {
+  position:absolute;                 
+  bottom:0;                         
+  left:0;  
+}

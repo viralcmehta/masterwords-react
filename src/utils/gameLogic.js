@@ -15,7 +15,7 @@ const wordListsbyDifficulty = {
 };
 
 function getGameStatus(turns, targetWord, maxAttempts) {
-  if(turns.at(-1).word === targetWord) {
+  if(turns.at(-1) && turns.at(-1).word === targetWord) {
     return 'winner';
   }
   if(turns.length >= maxAttempts) {
@@ -26,23 +26,23 @@ function getGameStatus(turns, targetWord, maxAttempts) {
 
 function validateWord(word, difficulty) {
   if(word.length !==5) {
-    return false;
+    return `${word} is longer than 5 letters`;
   }
   const lowerW = word.toLowerCase();
   const validWordList = wordListsbyDifficulty[difficulty];
 
   if(!validWordList.some((x) => {return x === lowerW;})) {
-    return false;
+    return `${word} is not a valid word`;
   }
 
   //Check other validations here;
   
-  return true;
+  return '';
 }
 
 function chooseRandomWord(difficulty) {
   const rnd = Math.floor(Math.random()*wordListsbyDifficulty[difficulty].length);
-  return wordListsbyDifficulty[difficulty][rnd];
+  return wordListsbyDifficulty[difficulty][rnd].toUpperCase();
 }
 
 function evaluateWord(word, target) {
