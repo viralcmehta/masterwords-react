@@ -68,7 +68,7 @@
     "build-deploy": "node scripts/build.js && aws s3 sync build/ s3://masterwords",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "deploy": "aws s3 sync build/ s3://masterwords --delete",
+    "deploy": "aws s3 sync build/ s3://masterwords --delete --exclude *.map",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
