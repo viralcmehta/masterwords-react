@@ -1,7 +1,7 @@
-import './css/KeyHints.css'
+import './css/KeyHints.css';
 import LetterBox from './LetterBox';
 import { keyboardLayout } from './../utils/gameLogic';
-import _ from 'lodash'
+import _ from 'lodash';
 import React, { useRef } from 'react';
 
 function renderkeyHintLetter(id, char, color) {
@@ -10,17 +10,11 @@ function renderkeyHintLetter(id, char, color) {
     clr = 'empty';
   }
 
-  return (
-    <LetterBox
-      value={char}
-      cName={'keyHint ' + clr}
-      ikey={id}
-      key={id} />
-  );
+  return <LetterBox value={char} cName={'keyHint ' + clr} ikey={id} key={id} />;
 }
 
 function getEmptyColorMap() {
-  var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+  var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   return _.zipObject(alphabet, Array(26).fill('default'));
 }
 
@@ -28,30 +22,29 @@ function getColorMapFromTurns(turns) {
   var fullList = [];
   var colorMap = getEmptyColorMap();
 
-  turns.forEach(t => {
+  turns.forEach((t) => {
     var listCharColor = _.zip(t.word.split(''), t.colors);
     fullList = [...fullList, ...listCharColor];
     return;
   });
 
-  fullList.forEach(p => {
+  fullList.forEach((p) => {
     let ch = p[0];
     let co = p[1];
 
     if (co === 'green') {
       //blindly upgrade the color
       colorMap[ch] = co;
-    }
-    else if (co === 'yellow') {
+    } else if (co === 'yellow') {
       if (colorMap[ch] !== 'green') {
         //upgrade only if current val is not green
         colorMap[ch] = co;
       }
     } else if (co === 'grey') {
       //upgrade only if current color is empty
-      if(colorMap[ch] === 'default') {
+      if (colorMap[ch] === 'default') {
         colorMap[ch] = co;
-      };
+      }
     }
   });
   return colorMap;
@@ -68,13 +61,13 @@ function renderKeyHintsRow(row, id, colorMap) {
 function KeyHints(props) {
   const countRef = useRef(0);
   const componentName = 'KeyHints';
-  console.log(`Render ${componentName} ${countRef.current++}` );
+  console.log(`Render ${componentName} ${countRef.current++}`);
 
   //Generate letter states
   let colorMap = getColorMapFromTurns(props.turns);
   return (
-    <div className='keyHints'>
-      {keyboardLayout.map( (r, i) => renderKeyHintsRow(r, i, colorMap))}
+    <div className="keyHints">
+      {keyboardLayout.map((r, i) => renderKeyHintsRow(r, i, colorMap))}
     </div>
   );
 }

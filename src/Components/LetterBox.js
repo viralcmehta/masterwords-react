@@ -1,14 +1,13 @@
-import React from "react";
-import "./css/LetterBox.css"
+import React from 'react';
+import './css/LetterBox.css';
 
-
-function LetterBox (props) {
+function LetterBox(props) {
   // const countRef = useRef(0);
   // const componentName = 'LetterBox';
   // console.log(`Render ${componentName} (${props.cName}-${props.ikey}) ${countRef.current++}` );
 
   return (
-    <div className={'letterbox ' + props.cName} key={props.ikey} >
+    <div className={'letterbox ' + props.cName} key={props.ikey}>
       {props.value}
     </div>
   );
