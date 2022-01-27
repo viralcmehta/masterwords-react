@@ -52,7 +52,7 @@ function getColorMapFromTurns(turns) {
 
 function renderKeyHintsRow(row, id, colorMap) {
   return (
-    <div className={'keyHint row' + id} key={10 * id}>
+    <div className={'keyHint row'} key={10 * id}>
       {row.map((k, i) => renderkeyHintLetter(10 * id + i, k, colorMap[k]))}
     </div>
   );
@@ -66,7 +66,7 @@ function KeyHints(props) {
   //Generate letter states
   let colorMap = getColorMapFromTurns(props.turns);
   return (
-    <div className="keyHints">
+    <div className="keyHints-row-container">
       {keyboardLayout.map((r, i) => renderKeyHintsRow(r, i, colorMap))}
     </div>
   );

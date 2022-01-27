@@ -1,5 +1,5 @@
-.keyHints {
+
+.keyHint.row {
   display: grid;
-  margin: auto;
-  justify-items: center;
+  grid-template-columns: repeat(10, 1fr);
 }

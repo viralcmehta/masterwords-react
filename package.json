@@ -7,6 +7,13 @@
       "react-app"
     ]
   },
+  "scripts": {
+    "build-deploy": "node scripts/build.js && aws s3 sync build/ s3://masterwords",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "deploy": "aws s3 sync build/ s3://masterwords --delete",
+    "test": "node scripts/test.js"
+  },
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-transform-react-inline-elements": "^7.16.7",
@@ -63,13 +70,6 @@
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1"
-  },
-  "scripts": {
-    "build-deploy": "node scripts/build.js && aws s3 sync build/ s3://masterwords",
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "deploy": "aws s3 sync build/ s3://masterwords --delete --exclude *.map",
-    "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [

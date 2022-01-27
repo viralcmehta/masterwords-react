@@ -36,7 +36,7 @@ function Board(props) {
     <div>
       <div className="board">{boxes}</div>
       <TurnInput
-        className="input"
+        className="turnInput"
         value={props.turnInputValue}
         handleSubmit={(e) => props.handleSubmit(e)}
         onChange={(e) => props.onChange(e)}

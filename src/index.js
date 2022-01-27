@@ -1,18 +1,15 @@
 import React, { useRef } from 'react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
-import {
-  validateWord,
-  chooseRandomWord,
-  evaluateWord,
-  getGameStatus,
-} from './utils/gameLogic';
+import { validateWord, chooseRandomWord, evaluateWord, getGameStatus } from './utils/gameLogic';
 import Board from './Components/Board';
 import KeyHints from './Components/KeyHints';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './w3.css';
 import './index.css';
 import preval from 'babel-plugin-preval/macro';
+import useWindowDimensions from './utils/windowDimensions';
 
 function App() {
   const countRef = useRef(0);
@@ -21,19 +18,16 @@ function App() {
   const difficulty = 'medium';
   const [inputVal, setInputVal] = useState('');
   const [turns, setTurns] = useState([]);
-  const [targetWord, setTargetWord] = useState(
-    chooseRandomWord(difficulty),
-  );
-  const [gameStatus, setGameStatus] = useState(
-    getGameStatus(turns, targetWord, numTurns),
-  );
+  const [targetWord, setTargetWord] = useState(chooseRandomWord(difficulty));
+  const [gameStatus, setGameStatus] = useState(getGameStatus(turns, targetWord, numTurns));
 
-  console.log(
-    `Render ${componentName} ${countRef.current++} gs ${gameStatus}`,
-  );
+  console.log(`Render ${componentName} ${countRef.current++} gs ${gameStatus}`);
   console.log(targetWord);
 
   const toastId = React.useRef(null);
+
+  const { height, width } = useWindowDimensions();
+  console.log(`Window sz ${width} px x ${height} px`);
 
   if (gameStatus === 'loser') {
     let toastOptions = {
@@ -41,10 +35,7 @@ function App() {
       type: toast.TYPE.ERROR,
     };
     if (!toast.isActive(toastId.current)) {
-      toastId.current = toast(
-        `LOSER: IT WAS ${targetWord}`,
-        toastOptions,
-      );
+      toastId.current = toast(`LOSER: IT WAS ${targetWord}`, toastOptions);
     }
   } else if (gameStatus === 'winner') {
     let toastOptions = {
@@ -52,10 +43,7 @@ function App() {
       type: toast.TYPE.SUCCESS,
     };
     if (!toast.isActive(toastId.current)) {
-      toastId.current = toast(
-        'WINNER WINNER CHICKEN DINNER',
-        toastOptions,
-      );
+      toastId.current = toast('WINNER WINNER CHICKEN DINNER', toastOptions);
       console.log(toastId.current);
     }
   }
@@ -111,12 +99,14 @@ function App() {
     toastId.current = null;
   };
 
-  const ite = { name: 'Viral', lname: 'Mehta' };
+  const buildString = preval`module.exports = new Date().toLocaleString();`;
+  const detailString = `${width}px x ${height}px`;
+  console.log(navigator.userAgent);
 
   return (
     <>
       <div className="game">
-        <div className="board">
+        <div className="board-input">
           <Board
             numAttempts={numTurns}
             turns={turns}
@@ -127,18 +117,13 @@ function App() {
             difficulty={difficulty}
           />
         </div>
-        <div>
+        <div className="keyboard">
           <KeyHints turns={turns} />
         </div>
       </div>
-      <ToastContainer
-        theme="dark"
-        autoClose={2500}
-        position={toast.POSITION.TOP_CENTER}
-      />
+      <ToastContainer theme="dark" autoClose={2500} position={toast.POSITION.TOP_CENTER} />
       <div id="buildString">
-        Build Date:{' '}
-        {preval`module.exports = new Date().toLocaleString();`}
+        Build Date: {buildString} Details: {detailString}
       </div>
     </>
   );

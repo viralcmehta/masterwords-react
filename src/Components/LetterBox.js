@@ -6,11 +6,7 @@ function LetterBox(props) {
   // const componentName = 'LetterBox';
   // console.log(`Render ${componentName} (${props.cName}-${props.ikey}) ${countRef.current++}` );
 
-  return (
-    <div className={'letterbox ' + props.cName} key={props.ikey}>
-      {props.value}
-    </div>
-  );
+  return <div className={'w3-round-large letterbox ' + props.cName}>{props.value}</div>;
 }
 
 const LetterBoxMemo = React.memo(LetterBox);

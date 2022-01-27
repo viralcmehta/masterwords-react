@@ -1,5 +1,5 @@
-.words:after {
-  clear: both;
-  content: "";
-  display: table;
+
+.turnComponent {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
 }
