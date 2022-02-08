@@ -1,7 +1,12 @@
 import React, { useRef } from 'react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { validateWord, chooseRandomWord, evaluateWord, getGameStatus } from './utils/gameLogic';
+import {
+  validateWord,
+  chooseRandomWord,
+  evaluateWord,
+  getGameStatus,
+} from './utils/gameLogic';
 import Board from './Components/Board';
 import KeyHints from './Components/KeyHints';
 import { ToastContainer, toast } from 'react-toastify';
@@ -19,7 +24,9 @@ function App() {
   const [inputVal, setInputVal] = useState('');
   const [turns, setTurns] = useState([]);
   const [targetWord, setTargetWord] = useState(chooseRandomWord(difficulty));
-  const [gameStatus, setGameStatus] = useState(getGameStatus(turns, targetWord, numTurns));
+  const [gameStatus, setGameStatus] = useState(
+    getGameStatus(turns, targetWord, numTurns),
+  );
 
   console.log(`Render ${componentName} ${countRef.current++} gs ${gameStatus}`);
   console.log(targetWord);
@@ -121,9 +128,14 @@ function App() {
           <KeyHints turns={turns} />
         </div>
       </div>
-      <ToastContainer theme="dark" autoClose={2500} position={toast.POSITION.TOP_CENTER} />
+      <ToastContainer
+        theme="dark"
+        autoClose={2500}
+        position={toast.POSITION.TOP_CENTER}
+      />
       <div id="buildString">
-        Build Date: {buildString} Details: {detailString}
+        Build Date: {buildString} <br />
+        Details: {detailString}
       </div>
     </>
   );

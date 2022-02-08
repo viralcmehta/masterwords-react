@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   display: grid;
   justify-self: center;
@@ -18,14 +23,10 @@ code {
     monospace;
 }
 
-.App {
-  text-align: center;
-}
 
 #buildString {
-  position:absolute;                 
-  bottom:0;                         
-  left:0;  
+  position:static;
+  margin-top: 5%;
 }
 
 .board-input {
@@ -34,9 +35,15 @@ code {
   justify-items: center;
 }
 
+
 #root {
   max-width: 100vw;
+  height: 100%;
+  overflow: hidden;
 }
 .game {
-  max-width: 100%
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+
 }

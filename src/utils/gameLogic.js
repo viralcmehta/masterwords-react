@@ -4,8 +4,8 @@ import { hardList } from './hardList';
 
 const keyboardLayout = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ''],
-  ['', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '', ''],
+  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+  ['↵', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'],
 ];
 
 const wordListsbyDifficulty = {
@@ -16,8 +16,13 @@ const wordListsbyDifficulty = {
 
 function getGameStatus(turns, targetWord, maxAttempts) {
   console.log(turns);
+  const lastElement = turns.length - 1;
 
-  if (turns.length > 0 && turns.at(-1) && turns.at(-1).word === targetWord) {
+  if (
+    turns.length > 0 &&
+    turns[lastElement] &&
+    turns[lastElement].word === targetWord
+  ) {
     return 'winner';
   }
   if (turns.length >= maxAttempts) {
@@ -47,7 +52,9 @@ function validateWord(word, difficulty) {
 }
 
 function chooseRandomWord(difficulty) {
-  const rnd = Math.floor(Math.random() * wordListsbyDifficulty[difficulty].length);
+  const rnd = Math.floor(
+    Math.random() * wordListsbyDifficulty[difficulty].length,
+  );
   return wordListsbyDifficulty[difficulty][rnd].toUpperCase();
 }
 

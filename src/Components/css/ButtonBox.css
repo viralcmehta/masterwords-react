@@ -1,4 +1,4 @@
-.letterbox {
+.buttonbox {
   background: rgb(221, 164, 169);
   border: 1px solid #999;
   font-size: 24px;
@@ -17,42 +17,37 @@
   align-items: center;
 }
 
-.letterbox{
+.buttonbox{
   flex-basis: auto;
 }
 
-.letterbox.word {
-  width: 70px;
-  height: 70px;
-}
-
-.letterbox.keyHint {
+.buttonbox.keyHint {
   width: 50px;
   height: 65px;
 }
 
-.letterbox.keyHint.default {
+.buttonbox.keyHint.default {
   background: cornsilk;
 }
 
-.letterbox.function {
+.buttonbox.function {
   width: 85px;
 }
 
-.letterbox.keyHint.empty {
+.buttonbox.keyHint.empty {
   background: transparent;
   border: 0px transparent;
 }
 
-.letterbox.green {
+.buttonbox.green {
   background: greenyellow;
 
 }
 
-.letterbox.yellow {
+.buttonbox.yellow {
   background: yellow;
 }
 
-.letterbox.grey {
+.buttonbox.grey {
   background: grey;
 }

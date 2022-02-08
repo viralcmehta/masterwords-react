@@ -3,6 +3,7 @@ import LetterBox from './LetterBox';
 import { keyboardLayout } from './../utils/gameLogic';
 import _ from 'lodash';
 import React, { useRef } from 'react';
+import ButtonBox from './ButtonBox';
 
 function renderkeyHintLetter(id, char, color) {
   let clr = color;
@@ -10,12 +11,19 @@ function renderkeyHintLetter(id, char, color) {
     clr = 'empty';
   }
 
-  return <LetterBox value={char} cName={'keyHint ' + clr} ikey={id} key={id} />;
+  return (
+    <ButtonBox
+      value={char}
+      cName={'keyHint ' + clr + (char.match(/[a-z]/i) ? '' : ' function')}
+      ikey={id}
+      key={id}
+    />
+  );
 }
 
 function getEmptyColorMap() {
-  var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  return _.zipObject(alphabet, Array(26).fill('default'));
+  var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ⌫↵'.split('');
+  return _.zipObject(alphabet, Array(28).fill('default'));
 }
 
 function getColorMapFromTurns(turns) {
