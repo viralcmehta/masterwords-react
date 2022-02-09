@@ -111,19 +111,17 @@ function App() {
   console.log(navigator.userAgent);
 
   return (
-    <>
+    <div className="App">
       <div className="game">
-        <div className="board-input">
-          <Board
-            numAttempts={numTurns}
-            turns={turns}
-            turnInputValue={inputVal}
-            onChange={(e) => onChange(e)}
-            handleSubmit={(e) => handleSubmit(e)}
-            resetBoard={() => resetBoard()}
-            difficulty={difficulty}
-          />
-        </div>
+        <Board
+          numAttempts={numTurns}
+          turns={turns}
+          turnInputValue={inputVal}
+          onChange={(e) => onChange(e)}
+          handleSubmit={(e) => handleSubmit(e)}
+          resetBoard={() => resetBoard()}
+          difficulty={difficulty}
+        />
         <div className="keyboard">
           <KeyHints turns={turns} />
         </div>
@@ -137,7 +135,7 @@ function App() {
         Build Date: {buildString} <br />
         Details: {detailString}
       </div>
-    </>
+    </div>
   );
 }
 

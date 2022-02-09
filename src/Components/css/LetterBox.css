@@ -11,19 +11,17 @@
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .letterbox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-basis: auto;
-}
-
-.letterbox.word {
-  width: 70px;
-  height: 70px;
+  max-width: 70px;
+  max-height: 70px;
+  width: 15vw;
+  height: 15vw;
 }
 
 .letterbox.keyHint {

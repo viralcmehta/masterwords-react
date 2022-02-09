@@ -9,13 +9,20 @@ function renderWordBoxes(turns, maxTurns) {
     colors: Array(5).fill('default'),
   };
 
-  let turnList = [...turns, ...Array(maxTurns).fill(emptyturn)].slice(0, maxTurns);
+  let turnList = [...turns, ...Array(maxTurns).fill(emptyturn)].slice(
+    0,
+    maxTurns,
+  );
 
   const boxes = turnList.map((turn, i) => {
     return (
-      <div key={i}>
-        <TurnComponent className="words" wordLen="5" attemptId={i} turn={turn} />
-      </div>
+      <TurnComponent
+        key={i}
+        className="words"
+        wordLen="5"
+        attemptId={i}
+        turn={turn}
+      />
     );
   });
   return boxes;

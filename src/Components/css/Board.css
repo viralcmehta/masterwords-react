@@ -1,5 +1,5 @@
 .board {
-  display: grid;
-  margin: auto;
-  justify-items: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
 }

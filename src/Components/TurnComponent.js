@@ -17,15 +17,9 @@ function TurnComponent(props) {
   const charClrs = _.zip(props.turn.word.split(''), props.turn.colors);
   return (
     <div className="turnComponent">
-      <div />
-      <div />
-      <div />
       {charClrs.map((cc, i) => {
         return renderTurnLetter(i, cc[0], cc[1]);
       })}
-      <div />
-      <div />
-      <div />
     </div>
   );
 }
